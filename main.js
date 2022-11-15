@@ -16,6 +16,7 @@ let pizza4= new pizza(4, "Roquefort", ["Salsa", "muzzarela", "aceitunas", "roque
 let pizza5= new pizza(5, "Fugazeta", ["Salsa", "muzzarela", "aceitunas", "cebolla"], 700, "./img/Fugazzeta.png");
 let pizza6= new pizza(6, "Especial", ["Salsa", "muzzarela", "aceitunas", "jamon", "morron"], 750, "./img/especial.png");
 
+
 const arrayPizzas = [];
 arrayPizzas.push(pizza1, pizza2, pizza3, pizza4, pizza5, pizza6);
 
@@ -24,12 +25,17 @@ const buscarBtn = document.querySelector(".buscar-btn");
 const buscarForm = document.querySelector(".buscar-form");
 const renderPizzas = document.querySelector(".render-pizzas");
 
+let ultimaPizza = JSON.parse(localStorage.getItem("ultimaPizza")) || {};
+
+const saveLocalStorage = () => {
+  localStorage.setItem("ultimaPizza", JSON.stringify(ultimaPizza));
+};
 
 const mostrarPizza = (pizza) =>
   `<div class="card ">
         <div class="card__izquierda">
-          <h2 class="card__titulo">Pizza ${pizza.nombre}</h2>
-          <p class="card__ingredientes">${pizza.ingredientes.join(", ")}</p>
+          <h2 class="card__titulo"> Pizza ${pizza.nombre}</h2>
+          <p class="card__ingredientes">Ingredientes: ${pizza.ingredientes.join(", ")}</p>
           <p class="card__precio">Precio: $${pizza.precio}</p>
         </div>
         <div class="card__derecha">
@@ -40,6 +46,8 @@ const mostrarPizza = (pizza) =>
 
 
 const renderizarPizza = (pizza) => {
+  ultimaPizza=pizza;
+  saveLocalStorage();
   renderPizzas.innerHTML =mostrarPizza(pizza);
 };
 
@@ -64,6 +72,7 @@ const buscarPizza = (e) => {
 
 const init = () => {
   buscarForm.addEventListener("submit", buscarPizza);
+  renderizarPizza(ultimaPizza);
 };
 
 init();
